@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+
+\node[state, style=thick] (q0) {$0$};
+\node[state, right=2cm of q0] (q1) {$1$};
+\node[state, above right=1cm and 2cm of q0] (q2) {$2$};
+\node[state, right=of q1] (q3) {$3$};
+\node[state, right=of q3] (q4) {$4$};
+
+\draw (q0) edge[below] node{$a/6 \otimes 5$} (q1)
+      (q0) edge[below, bend left] node{$a/8 \otimes 7$} (q2)
+      (q1) edge[below] node{$b/3$} (q3)
+      (q2) edge[above, bend left] node{$c/4 \otimes 2$} (q4)
+      (q3) edge[below] node{$c/2$} (q4)
+
+\end{tikzpicture}

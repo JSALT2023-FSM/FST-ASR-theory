@@ -1,0 +1,18 @@
+\begin{tikzpicture}
+
+\node[state, style=thick, accepting] (q0) {$0$};
+\node[state, above right=of q0, xshift=-0.8cm, accepting] (q1) {$1$};
+\node[state, right=of q0, accepting] (q2) {$2$};
+
+\draw 
+(q0) edge[loop left] node{$\phi:\epsilon$} ()
+(q1) edge[loop above] node{$a:\epsilon$} ()
+(q2) edge[loop right] node{$b:\epsilon$} ()
+(q0) edge[sloped, above, bend left] node{$a:a$} (q1)
+(q1) edge[sloped, below] node{$\phi:\epsilon$} (q0)
+(q1) edge[sloped, above, bend left] node{$b:b$} (q2)
+(q2) edge[sloped, below] node{$a:a$} (q1)
+(q2) edge[sloped, below, bend left] node{$\phi:\epsilon$} (q0)
+(q0) edge[sloped, above] node{$b:b$} (q2);
+
+\end{tikzpicture}

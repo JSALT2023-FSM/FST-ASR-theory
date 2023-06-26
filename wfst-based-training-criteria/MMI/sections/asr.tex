@@ -1,0 +1,161 @@
+\section{What is an ASR ``model''?}
+\label{sec:asr}
+
+Suppose we have a speech input $\mathbf{X}\in \mathbb{R}^{T^{\prime}\times F}$. 
+%
+We have some reference transcript $\mathbf{w} = (w_1,\ldots,w_L)$, where $w_l \in \Sigma$, and $\Sigma$ is the vocabulary. 
+%
+The goal of ASR is to predict $\hat{\mathbf{w}}$, which is the best estimate for $\mathbf{w}$. 
+%
+This is usually done by modeling $P(\mathbf{w}|\mathbf{X})$ (either directly or indirectly using Bayes rule) and computing the Bayes optimal solution (exact or approximate), i.e., 
+
+\begin{equation}
+\label{eq:asr}
+    \hat{\mathbf{w}} = \text{arg}\max_{\mathbf{w}} P(\mathbf{w}|\mathbf{X})
+\end{equation}
+
+\paragraph{} Most complications in the ASR task arise from the fact that $T'$ is not equal to $L$, and there is no known alignment between the input and output sequence. 
+%
+Indeed, if an alignment is known, we could simply use frame-level cross-entropy for training, as was standard in older hybrid models before sequence-level objectives became popular.
+
+\paragraph{} When we talk about ASR ``models,'' we are usually referring to a framework comprising several components, which we will discuss next.
+
+\subsection{Frame-synchronous and label-synchronous models}
+
+Based on how the input is processed, ASR models can be categorized as frame-synchronous or label-synchronous~\cite{Prabhavalkar2017ACO, Dong2020ACO}. 
+%
+Frame-synchronous models are driven by the input frames: they process the frames one-at-a-time and stop when there are no more frames to process. 
+%
+Some examples are traditional HMM-based models, CTC, RNN-transducers, etc. Label-synchronous models, on the other hand, are driven by the output text. 
+%
+Often they process the entire input and then start predicting output tokens one-by-one until an \texttt{<eos>} token is predicted. 
+%
+The dominant label-synchronous model is the attention-based encoder-decoder. 
+%
+In this document, our focus is on frame-synchronous models since they have several obvious advantages:
+
+\begin{enumerate}
+    \item They are naturally streaming if the encoder is left-context only.
+    \item In addition to the tokens, they provide a sense of ``alignment'' between the label and the frames, which can be used to estimate token-level timestamps.
+\end{enumerate}
+
+\subsection{Network architecture}
+
+Modern ASR systems usually process the input $\mathbf{X}$ using a neural network function $h(\mathbf{X}) = \mathbf{h} \in \mathbb{R}^{T\times D}$, where $T \leq T'$ usually due to frame sub-sampling, and so equation (\ref{eq:asr}) becomes
+%
+\begin{equation}
+    \hat{\mathbf{w}} = \text{arg}\max_{\mathbf{w}} P(\mathbf{w}|\mathbf{h}).
+\end{equation}
+
+Here, $h(\cdot)$ may be the functional equivalent of any standard architecture, such as convolutional, recurrent, or self-attention layers. 
+%
+Often, the encoder architecture itself may also be referred to as the ``model'' by some abuse of notation. 
+%
+For the purpose of this document, the specific choice of architecture is not important.
+
+\paragraph{} In some cases, the output label sequence may also be processed by a neural network to provide additional context and make the outputs conditionally dependent, such as in RNN-Transducers through a prediction network. 
+%
+However, this is beyond the scope for this document.
+
+\subsection{Modeling units}
+
+The final transcript that we want to generate using an ASR system would usually contain words. 
+%
+However, it is often computationally easier for the model to predict the output in the form of sub-words units. 
+%
+The most common modeling units used are as follows:
+
+\begin{enumerate}
+    \item Characters
+    \item Phonemes
+    \item Character groups, such as bi-chars, tri-chars, etc.
+    \item Phoneme groups, such as bi-phones, tri-phones, etc.
+    \item Chenones/senones, which are context dependent char/phoneme groups tied with a decision tree
+    \item BPE units
+\end{enumerate}
+
+\paragraph{} Due to historical reasons (e.g., where the models were developed), CTC models developed using character/BPE units while LF-MMI used senones. 
+%
+But the choice of modeling unit is not tied to the model, and different units may be used based on their advantages/disadvantages~\cite{zhang_lattice-free_2021}. 
+%
+For example, using phone-based modeling units requires a phonetic lexicon, and using chenones/senones would require state tying using likelihoods from a GMM. 
+%
+Modern ``end-to-end'' ASR models have converged to the choice of BPE as the modeling units.
+
+\paragraph{} Nevertheless, in the WFST-based decoding framework, the decoding graph can be built to directly output words even if the model predicts sub-word units. 
+%
+This is done by composing the graph with the lexicon FST $L$.
+
+
+\subsection{Label topology}
+
+Earlier, we mentioned that usually when training ASR models, the exact ``alignment'' between $\mathbf{X}$ and $\mathbf{y}$ is not known. 
+%
+The label topology is the component which defines the mapping between the label sequence and the modeling units. 
+%
+Let us denote this as $\mathcal{T}$. 
+%
+Consider also the linear FST denoting the label sequence as $\mathcal{Y}(\mathbf{w})$\footnote{We assume here that $\mathbf{w}$ has been tokenized into the desired modeling units.}. 
+%
+Then, the ``alignment lattice,'' i.e., the set of all possible alignments mapping to $\mathbf{w}$ is given by the composition of $\mathcal{T}$ and $\mathcal{Y}(\mathbf{w})$, i.e.,
+
+\begin{equation}
+    \mathcal{A}(\mathbf{w}) = \mathcal{T} \circ \mathcal{Y}(\mathbf{w}).
+\end{equation}
+
+Suppose our vocabulary consists of the characters $a$ and $b$. 
+%
+For traditional HMM-based systems which also modeled $\sil$ explicitly, a 1-state HMM topology can be represented by Fig.~\ref{fig:hmm_topo}.
+
+\begin{figure}[t]
+\begin{subfigure}{0.45\linewidth}
+\centering
+\resizebox{\textwidth}{!}{%
+\input{figs/hmm_topo}
+}
+\caption{1-state HMM topology}
+\label{fig:hmm_topo}
+\end{subfigure}
+\begin{subfigure}{0.55\linewidth}
+\centering
+\resizebox{\textwidth}{!}{%
+\input{figs/ctc_topo}
+}
+\caption{CTC topology}
+\label{fig:ctc_topo}
+\end{subfigure}
+\caption{Topology FSTs for standard 1-state HMM and CTC.}
+\end{figure}
+
+\paragraph{} Another popular topology in modern ASR systems is the CTC topology. 
+%
+The CTC topology generates alignments formed by repeating the characters and inserting blanks ($\phi$) to allow repeated characters in the label sequence. 
+%
+This is shown in Fig.~\ref{fig:ctc_topo}.
+
+\subsection{Training objective}
+
+Let $\mathcal{B}$ denote the many-to-one mapping from an alignment $\mathbf{a}$ to an output label sequence $\mathbf{w}$, which is determined by the topology $\mathcal{T}$ and the input length $T$. Then, we can expand equation (\ref{eq:asr}) using the following:
+
+\begin{equation}
+    P(\mathbf{w}|\mathbf{X}) = \sum_{\mathbf{a}\in \mathcal{B}^{-1}(\mathbf{w})} P(\mathbf{a}|\mathbf{X}).
+\end{equation}
+
+For discriminative training of the ASR model, we usually maximize the log, i.e.,
+
+\begin{equation}
+    \mathcal{L}_{\theta} = \log \left( \sum_{\mathbf{a}\in \mathcal{B}^{-1}(\mathbf{w})} P_{\theta}(\mathbf{a}|\mathbf{X}) \right).
+\end{equation}
+
+In a very general setting, the distribution can be written as:
+
+\begin{equation}
+    P_{\theta}(\mathbf{a}|\mathbf{X}) = \frac{p(\mathbf{a})\exp(f_{\theta}(\mathbf{X},\mathbf{a}))}{\mathbb{E}_{p(\mathbf{a'})}[\exp(f_{\theta}(\mathbf{X},\mathbf{a'}))]}.
+\end{equation}
+
+You may recognize that this as similar to Bayes rule on $P_{\theta}(\mathbf{a}|\mathbf{X})$, where the likelihood is replaced with a general ``potential function'' and the normalization term in the denominator is written using an expectation over all possible alignments. This way of expressing a distribution from raw (un-normalized) scores goes by many names including the Boltzmann, and Gibbs distributions. Finally, the loss function becomes:
+
+\begin{equation}
+\label{eq:loss}
+    \mathcal{L}_{\theta} = \log \left( \frac{\sum_{\mathbf{a}\in \mathcal{B}^{-1}(\mathbf{w})} p(\mathbf{a})\exp(f_{\theta}(\mathbf{X},\mathbf{a}))}{\mathbb{E}_{p(\mathbf{a'})}[\exp(f_{\theta}(\mathbf{X},\mathbf{a'}))]} \right).
+\end{equation}

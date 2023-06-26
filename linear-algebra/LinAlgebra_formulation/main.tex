@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\usepackage{biblatex}
+\addbibresource{refs.bib}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+
+\tikzset{
+    ->,                                         % makes the edges directed
+    >=stealth,                                  % makes the arrow heads bold
+    %node distance=2cm,                          % specifies the minimum distance between two nodes. Change if necessary.
+   % every state/.style={},                 % sets the properties for each ’state’ node
+    initial text=$ $,                       % sets the text that appears on the start arrow
+}
+
+\title{Linear Algebraic Expression of Weighted Finite State Automata in Speech Recognition}
+\author{} % I expect the final document to gather the contribution of many authors including the member of the JSALT FSM and some members of the LISN (e.g. Caio Corro)  
+%\date{}
+
+
+\begin{document}
+
+\maketitle
+\abstract{
+This an attempt to express of the framework Weighted Finite State Automata in terms of linear algebraic operations.
+}
+\author{Lucas Ondel}
+
+\tableofcontents
+
+\input{sections/1_preliminaries}
+\input{sections/2_matrix_wfsa}
+\input{sections/3_wfsa_ops}
+\input{sections/4_loss_functions}
+\input{sections/5_backprop}
+\input{sections/6_specific_wfsa}
+
+\printbibliography
+
+\end{document}

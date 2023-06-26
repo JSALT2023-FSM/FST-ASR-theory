@@ -1,0 +1,28 @@
+\section{WFSA-based loss function}
+
+Let $\mathbf{X} = \begin{bmatrix} \mathbf{x}_1, \dots{x}_N \end{bmatrix}$, $\mathbf{x}_i \in \mathbb{R}^D$, be a input sequence of features and let $\mathbf{Y} = \phi(\mathbf{X}) = \begin{bmatrix} \mathbf{y}_1, \dots, \mathbf{y}_M \end{bmatrix}$, $\mathbf{y}_i \in \mathbb{R}^{D'}$ be the output sequence of an arbitrary mapping $\phi$ (typically a neural network).
+
+We defined:
+\begin{align}
+    p(\mathbf{X}, \mathbf{y}) &= \frac{\sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \} }{Z} \\
+    Z &= \int_{\mathbf{X}} \sum_{\mathbf{z}} \sum_\mathbf{y} \exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \} \text{d}\mathbf{X}
+\end{align}
+
+\subsection{Mutual Information}
+
+\begin{align}
+    I(\mathbf{X}; \mathbf{y}) &= \mathbb{E}_{p(\mathbf{X}, \mathbf{y})} \Big[ \ln \frac{p(\mathbf{X}, \mathbf{y})}{p(\mathbf{X})p(\mathbf{y})} \Big]
+\end{align}
+where
+\begin{align}
+     \frac{p(\mathbf{X}, \mathbf{y})}{p(\mathbf{X})} &= \frac{\sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \} }{\sum_{\mathbf{y}} \sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \}} \frac{Z}{Z} \\
+     &= \frac{\sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \} }{\sum_{\mathbf{y}} \sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \nu(\mathbf{z}) \}}
+\end{align}
+where the function $\nu$ is defined such that
+\begin{align}
+     \exp \{ \nu(\mathbf{z}) \} &= \sum_{\mathbf{y}} \exp \{ \psi(\mathbf{z}, \mathbf{y}) \}.
+\end{align}
+Therefore the MI objective function becomes:
+\begin{align}
+    I(\mathbf{X}; \mathbf{y}) &= \mathbb{E}_{p(\mathbf{X}, \mathbf{y})} \Big[\ln \Big( \sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \psi(\mathbf{z}, \mathbf{y}) \Big) - \ln \Big( \sum_{\mathbf{y}} \sum_{\mathbf{z}}\exp \{ \phi(\mathbf{X}, \mathbf{z}) + \nu(\mathbf{z}) \Big)  \Big] + \text{const}
+\end{align}

@@ -1,0 +1,71 @@
+\section{WFST formulation of LF-MMI}
+\label{sec:lfmmi}
+
+Let us now formulate the original LF-MMI objective using the general components described in Section~\ref{sec:asr}. 
+
+\paragraph{} First, we define the following WFSTs on the log-semiring.
+
+\begin{itemize}
+\item $H$: This is a 1-state HMM topology~\footnote{In the original paper~\cite{Povey2016PurelySN}, the 2-state skip HMM topology was used, but it was later simplified to the 1-state HMM topology.}.
+\item $\phi$: This is the ``sausage'' lattice representing the output of the neural network encoder. It is equivalent to a $T \times |\Sigma|$ matrix where each cell $(t,s)$ contains the score for token $s$ at time $t$.
+\item $G$: This is the WFST representation of the language model over the modeling units.
+\end{itemize}
+
+\paragraph{} We create 2 versions of the decoding graph:
+
+\begin{enumerate}
+    \item \textit{Numerator graph} ($M_N$): $H \circ \mathcal{Y}(\mathbf{w}) \circ G$ 
+    \item \textit{Denominator graph} ($M_D$): $H \circ G$
+\end{enumerate}
+
+It is evident that the numerator graph is just a \textit{clamped} version of the general decoding graph, where the clamping is with respect to the target sequence $\mathbf{w}$.
+
+\paragraph{} Let us now re-write equation~(\ref{eq:loss}).
+\begin{align}
+\mathcal{L}_{\theta} &= \log \left( \frac{\sum_{\mathbf{a}\in \mathcal{B}^{-1}(\mathbf{w})} p(\mathbf{a})\exp(f_{\theta}(\mathbf{X},\mathbf{a}))}{\mathbb{E}_{p(\mathbf{a'})}[\exp(f_{\theta}(\mathbf{X},\mathbf{a'}))]} \right) \\
+&= \log \left( \sum_{\mathbf{a}\in \mathcal{B}^{-1}(\mathbf{w})} p(\mathbf{a})\exp(f_{\theta}(\mathbf{X},\mathbf{a})) \right) - \log \mathbb{E}_{p(\mathbf{a'})}[\exp(f_{\theta}(\mathbf{X},\mathbf{a'}))] \\
+&=  \underbrace{\left[[ \phi \circ M_N \right]]}_{\text{numerator lattice}} - \underbrace{\left[[ \phi \circ M_D \right]]}_{\text{denominator lattice}}, \label{eq:WFST_MMI}
+\end{align}
+where $[[\cdot]]$ denotes the forward score on the WFST.
+
+\paragraph{} This is because the WFSTs are already defined over the log semiring. The potential functions are obtained from the arc weights on $\phi$. For the numerator term, the ``clamping'' (composition with $\mathcal{Y}(\mathbf{w})$) is equivalent to summing over the subset $\mathcal{B}^{-1}(\mathbf{w})$.
+
+\subsection{Gradient}
+% Show how to compute gradients in this frameworks
+\paragraph{} To train models using this objective, we need to compute gradients w.r.t. the neural network outputs $\phi$. We will show how these gradients can also be computed via dynamic programming, i.e., using WFST operations on the numerator and denominator lattices. By denominator / numerator lattice (as opposed to graph), we mean the two terms in Equation \ref{eq:WFST_MMI}.
+
+The forward pass for an input $\mathbf{X}$ can be expressed as
+\begin{equation}
+    [\![\phi \circ M]\!] = \log{\sum_{\mathbf{a} \in M} p\left(\mathbf{a}\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t }}
+\end{equation}
+
+Note that in this case $f_\theta\left(\mathbf{X}, \mathbf{a}\right) = \sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t$, is the score of alignment, $\mathbf{a}$, occurring with input, $\mathbf{X}$. In other words, the score of the alignment is the sum of scores of each individual symbol in the sequence. We will see this again in Section \ref{sec:ctc}.
+
+We derive the gradient for this objective function below. 
+\begin{align}
+    \nabla_{\phi_{i}^\tau} \log{ p_\theta\left(\mathbf{w} | \mathbf{X}\right)} &= \nabla_{\phi_{i}^\tau} [\![\phi \circ M_N]\!] - \nabla_{\phi_{i}^\tau} [\![\phi \circ M_D]\!] \\
+    = \frac{\sum_{\mathbf{a} \in M_N} p\left(\mathbf{a}\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t} \sum_{t=0}^{T-1}\nabla_{\phi_{i}^\tau} \phi_{\mathbf{a}_t}^t}{\sum_{\mathbf{a}^\prime \in M_{N}} p\left(\mathbf{a}^\prime\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}^\prime_t}^t}} &- \frac{\sum_{\mathbf{a} \in M_D} p\left(\mathbf{a}\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t} \sum_{t=0}^{T-1}\nabla_{\phi_{i}^\tau} \phi_{\mathbf{a}_t}^t}{\sum_{\mathbf{a}^\prime \in M_D} p\left(\mathbf{a}^\prime\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}^\prime_t}^t}} \\
+    = \frac{\sum_{\mathbf{a} \in M_N} p\left(\mathbf{a}\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t} \mathbb{I}\left(\mathbf{a}_\tau, i\right)}{\sum_{\mathbf{a}^\prime \in M_N} p\left(\mathbf{a}^\prime\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}^\prime_t}^t}} &- \frac{\sum_{\mathbf{a} \in M_D} p\left(\mathbf{a}\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t} \mathbb{I}\left(\mathbf{a}_\tau, i\right)}{\sum_{\mathbf{a}^\prime \in M_D} p\left(\mathbf{a}^\prime\right)e^{\sum_{t=0}^{T-1}\phi_{\mathbf{a}^\prime_t}^t}} \\
+    = \sum_{\mathbf{a} \in M_N} p\left(\mathbf{a} | \mathbf{X}, \mathbf{w}\right)\mathbb{I}\left(\mathbf{a}_\tau, i\right) &- \sum_{\mathbf{a} \in M_D} p\left(\mathbf{a} | \mathbf{X}\right)\mathbb{I}\left(\mathbf{a}_\tau, i\right).
+\end{align}
+
+Let $l\left[\mathbf{a}_\tau\right]$ indicate the label on arc $\mathbf{a}_\tau$. In the above equations $\mathbb{I}\left(\mathbf{a}_\tau, i\right)$ is the indicator function.
+
+\begin{equation*}
+\mathbb{I}\left(\mathbf{a}_\tau, i\right) =
+\begin{cases} 1 & l\left[\mathbf{a}_\tau\right] = i \\ 0 & l\left[\mathbf{a}_\tau\right] \neq i \end{cases}
+\end{equation*}
+
+We see then that the gradient is just a difference between the soft-counts in the numerator and denominator graphs of arcs with label, $l\left[\mathbf{a}_\tau\right]$, equal to $i$, occurring at time $\tau$. These quantities can be efficiently computed by running the forward and backward algorithm on the lattices produced by $\phi \circ M_D$/$M_N$ and computing the forward and backward scores $a_{M_D}\left(s, \tau\right), b_{M_D}\left(s, \tau\right), a_{M_N}\left(s, \tau\right),b_{M_N}\left(s, \tau\right)$. Note that we overloaded notation a little here when we are referring to forward and backward scores on the lattices, $\phi \circ M_{\{N,D\}}$ by simply writing $M_{\{N,D\}}$. The terms in the gradient can be expressed in terms of these quantities. $s$ refers to a particular state in the WFST, Let $L\left(\mathbf{a}_\tau\right), R\left(\mathbf{a}_\tau\right)$, be the states from which an arc, $\mathbf{a}_\tau$ leaves and into which it enters respectively, and let $w_M\left(\mathbf{a}_\tau\right)$ be the weight on that arc in the lattice $\phi \circ M$. Then the sum of all paths taking arc, $\mathbf{a}_\tau$, which we will define as $c\left(\mathbf{a}_\tau\right)$, can be expressed as 
+
+\begin{equation}
+    c_M\left(\mathbf{a}_\tau\right) = a_{M}\left(L\left(\mathbf{a}_\tau\right), \tau\right)w_M\left(\mathbf{a}_\tau\right) b_{M}\left(R\left(\mathbf{a}_\tau\right), \tau\right).
+\end{equation}
+
+Finally, the gradient can be computed by re-using the forward scores (you can think of them as normalizers so that $c_M\left(\cdot\right)$ is a soft-count, and not just an arbitrary score) as
+
+\begin{align}
+     \nabla_{\phi_{i}^\tau}\log{ p_\theta\left(\mathbf{w} | \mathbf{x}\right)} &= \sum_{\mathbf{a}_\tau \in M_N : l\left[\mathbf{a}_\tau\right] = i}\frac{c_{M_N}\left(\mathbf{a}_\tau\right)}{[\![\phi \circ M_N]\!]} - \sum_{\mathbf{a}_\tau \in M_D : l\left[\mathbf{a}_\tau\right] = i}\frac{c_{M_D}\left(\mathbf{a}_\tau\right)}{[\![\phi \circ M_D]\!]}.
+\end{align}
+
+Therefore, the objective and gradient of MMI type objectives can be computed by WFST operations on appropriately defined graphs. This formulation is general and only relied on a single assumption -- that $f_\theta\left(\mathbf{X}, \mathbf{a}\right) = \sum_{t=0}^{T-1}\phi_{\mathbf{a}_t}^t$, be the score of alignment, $\mathbf{a}$, occurring with input $\mathbf{X}$. When we interpret $\phi_{\mathbf{a}_t}^t$ as log-probabilities, this is equivalent to saying that the probability of the next symbol, $\mathbf{a}_t$ in alignment $\mathbf{a}$ is conditionally independent of its history given input $\mathbf{X}$. This is the Markov assumption and is what enables representing this type of objective using WFSTs.

@@ -1,0 +1,35 @@
+\subsection{Backpropagation through WFSA}
+
+We turn now to the problem of estimating the gradient of $W(\mathcal{A})$ --- where $\mathcal{A}$ is an acyclic simple WFSA $\mathcal{A}$ over a semiring $K$ --- with respect to the parameters $\boldsymbol{\theta} = \{ \boldsymbol{\alpha}, \boldsymbol{\omega},  \mathbf{T}, \boldsymbol{\omega}, \rho\}$. The gradient depends on the semiring $K$ and therefore we cannot obtain a unique solution. Instead we restrict ourselves to semirings that are isomorphic to the  probability semiring. 
+
+\paragraph{} Let $P = (\mathbb{R}^+, +, \cdot, 0, 1)$ be the probability semiring and let $K = (\mathbb{K}, \oplus, \otimes, \bar{0}, \bar{1})$ be a semiring isomorphic to $P$ with the morphism $f : K \mapsto P$. Let $\mathcal{A}_K = (\Lambda, Q, I, F, \alpha, \omega, E_K)$ be a simple WFSA over the semiring $K$ and 
+\begin{align}
+    \mathcal{A}_P &= (\Lambda, Q, I, F, f \circ \alpha, f \circ \omega, E_P) \\
+    E_P &= \{ (s, l, d, f(w)) : \forall (s, l, d, w) \in E_K\}
+\end{align} 
+where, in this context, $\circ$ is the function composition operator. Informally, $\mathcal{A}_P$ is the automaton $\mathcal{A}_K$ with weights converted to the probability semiring. 
+
+\paragraph{} Using the isomorphic nature of $\mathcal{A}_K$ and $\mathcal{A}_P$, we can derive a practical formula of the gradient:
+\begin{align}
+    \frac{\partial W(\mathcal{A}_K)}{\partial \boldsymbol{\theta}_K} &= \frac{\partial f^{-1}( W(\mathcal{A}_P) ) }{\partial \boldsymbol{\theta}_K} \\
+    &= \frac{\partial f^{-1}}{\partial W(\mathcal{A}_P)} \frac{\partial W(\mathcal{A}_P)}{\partial \boldsymbol{\theta}_P}, \label{eq:grad_sum_paths}
+\end{align}
+where $\boldsymbol{\theta}_K = \{ \boldsymbol{\alpha}_K,  \mathbf{T}_K, \boldsymbol{\omega}_K, \rho_K \}$ and $\boldsymbol{\theta}_P = \{ \boldsymbol{\alpha}_P,  \mathbf{T}_P, \boldsymbol{\omega}_P, \rho_P \}$ are the parameters of 
+$\mathcal{A}_K$ and $\mathcal{A}_P$ respectively. Since $W(\mathcal{A}_P)$ is defined in the real semiring its gradient can evaluated easily:
+\begin{align}
+    W(\mathcal{A}_P) &= \rho + \sum_{n=1}^{k-1} \boldsymbol{\alpha}_P^{\top} \mathbf{T}_P^{n} \boldsymbol{\omega}_p. \label{eq:grad_sum_paths_real}
+\end{align}
+From \eqref{eq:grad_sum_paths_real} we get
+\begin{align}
+    \frac{\partial W(\mathcal{A}_P)}{\partial \boldsymbol{\alpha}} &= \sum_{n=1}^{k-1} \mathbf{T}_P^n \boldsymbol{\omega}_P \\
+    \frac{\partial W(\mathcal{A}_P)}{\partial \mathbf{T}_P} &= \sum_{r=0}^{k - 2} \sum_{q=0}^{k-2-r} \mathbf{T}_P^{r \top} \boldsymbol{\alpha}_P \boldsymbol{\omega}_P^\top \mathbf{T}_P^{q \top} \label{eq:grad_adj_matrix}\\
+    \frac{\partial W(\mathcal{A}_P)}{\partial \boldsymbol{\omega}} &= \sum_{n=1}^{k-1} (\boldsymbol{\alpha}^\top \mathbf{T}_P^n)^\top \\
+    \frac{\partial W(\mathcal{A}_P)}{\partial \rho} &= 1,
+\end{align}
+where we have used the identity
+\begin{align}
+    \frac{\partial \mathbf{a}^\top \mathbf{X}^d \mathbf{b}}{\partial \mathbf{X}} &= \sum_{r=0}^{d-1} \mathbf{X}^{r\top} \mathbf{a} \mathbf{b}^\top \mathbf{X}^{d - 1 - r \top}
+\end{align}
+in \eqref{eq:grad_adj_matrix}.
+
+

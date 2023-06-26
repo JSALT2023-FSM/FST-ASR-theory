@@ -1,0 +1,63 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\usepackage[labelformat=simple]{subcaption}
+\renewcommand\thesubfigure{(\alph{subfigure})}
+\usepackage[font=small,labelfont=bf]{caption}
+\allowdisplaybreaks
+
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+
+\tikzset{
+    ->,                                         % makes the edges directed
+    >=stealth,                                  % makes the arrow heads bold
+    node distance=3cm,                          % specifies the minimum distance between two nodes. Change if necessary.
+   % every state/.style={},                 % sets the properties for each ’state’ node
+    initial text=$ $,                       % sets the text that appears on the start arrow
+}
+
+\newcommand{\sil}{\langle sil \rangle}
+\newcommand{\blank}{\langle b \rangle}
+
+\title{WFST formulation of lattice-free MMI}
+\author{Desh Raj, Matthew Wiesner}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We derive the lattice-free maximum mutual information (LF-MMI) based ASR model from first principles of WFSTs. 
+%
+This leads to discussion of implementation variants such as end-to-end LF-MMI and the \texttt{icefall} MMI. 
+%
+We also present its connection to the popular CTC objective. 
+\end{abstract}
+
+\input{sections/asr}
+
+\input{sections/lfmmi}
+
+\input{sections/variants}
+
+\input{sections/ctc}
+
+\bibliographystyle{abbrv}
+\bibliography{refs}
+
+\end{document}

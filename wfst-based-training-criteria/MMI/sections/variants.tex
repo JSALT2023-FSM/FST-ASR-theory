@@ -1,0 +1,18 @@
+\section{Different LF-MMI implementations}
+
+Different choices for the model components result in different existing implementations of the LF-MMI model. For all of these, the training objective remains the same; the difference lies merely in the choice of architecture, modeling unit, or label topology. We summarize some of these implementations in the following table.
+
+\begin{table}[h]
+\centering
+\caption{Different LF-MMI implementations}
+\label{tab:variants}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Component} & \textbf{Kaldi (original)}~\cite{Povey2016PurelySN} & \textbf{Kaldi (E2E)}~\cite{hadian_end--end_2018} & \textbf{Icefall}$^{\dagger}$ \\ \midrule
+Encoder & TDNN & TDNN-LSTM & Conformer \\
+Modeling unit & Senones & Full bi-phones & BPE \\
+Label topology & 2-state skip HMM (acyclic) & 2-state skip HMM, 1-state HMM & CTC \\
+G.fst & 4-gram phone LM & 4-gram phone LM & 2-gram BPE LM \\ \bottomrule
+\multicolumn{4}{@{}l}{$^{\dagger}$\footnotesize{\url{https://github.com/k2-fsa/icefall/blob/master/icefall/mmi.py}}} \\
+\end{tabular}
+\end{table}

@@ -1,0 +1,353 @@
+@STRING{confICASSP = "Proc. of {IEEE} Intern. Conf. on Acoustics, Speech and Signal Processing (ICASSP)"}
+@STRING{confInterspeech = "Proc. of Interspeech"}
+@STRING{confACL = "Proc. of the Joint Conf. of the 47th Annual Meeting of the ACL and the 4th Int. Joint Conf. on Natural Language Processing of the AFNLP"}
+@STRING{workSLT = "Proc. of {IEEE} Spoken Language Technology Workshop ({SLT})"}
+@STRING{confICML = "Proc. of Intern. Conf. on Machine Learning ({ICML})"}
+@STRING{confASRU = "{IEEE} Automatic Speech Recognition and Understanding Workshop ({ASRU})"}
+@STRING{confNIPS = "Advances in Neural Information Processing Systems"}
+
+% conformer acoustic model
+
+@inproceedings{heigold2008modified,
+	title={Modified MMI/MPE: A direct evaluation of the margin in speech recognition},
+	author={Heigold, Georg and Deselaers, Thomas and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle={Proceedings of the 25th international conference on Machine learning},
+	pages={384--391},
+	year={2008}
+}
+
+@inproceedings{eisner2001expectation,
+	title={Expectation semirings: Flexible EM for learning finite-state transducers},
+	author={Eisner, Jason},
+	booktitle={Proceedings of the ESSLLI workshop on finite-state methods in NLP},
+	pages={1--5},
+	year={2001}
+}
+
+@article{hoffmeister2011wfst,
+	title={WFST enabled solutions to ASR problems: Beyond HMM decoding},
+	author={Hoffmeister, Bj{\"o}rn and Heigold, Georg and Rybach, David and Schluter, Ralf and Ney, Hermann},
+	journal={IEEE Transactions on Audio, Speech, and Language Processing},
+	volume={20},
+	number={2},
+	pages={551--564},
+	year={2011},
+}
+
+@inproceedings{povey2002minimum,
+	title={Minimum phone error and I-smoothing for improved discriminative training},
+	author={Povey, Daniel and Woodland, Philip C},
+	booktitle=confICASSP,
+	volume={1},
+	pages={I--105},
+	year={2002},
+}
+
+@inproceedings{gibson2006hypothesis,
+	title={Hypothesis spaces for minimum Bayes risk training in large vocabulary speech recognition.},
+	author={Gibson, Matthew and Hain, Thomas},
+	booktitle=confINTERSPEECH,
+	volume={6},
+	pages={2406--2409},
+	year={2006}
+}
+@inproceedings{gulati2020conformer,
+	author={A. Gulati and J. Qin and C. Chiu and N. Parmar and Y. Zhang and J. Yu and W. Han and S. Wang and Z. Zhang and Y. Wu and R. Pang},
+	title     = {{Conformer: Convolution-augmented Transformer for Speech Recognition}},
+	booktitle= confINTERSPEECH,
+	year      = {2020},
+}
+
+@article{beck2019lstm,
+	title={{LSTM} language models for lvcsr in first-pass decoding and lattice-rescoring},
+	author={Beck, Eugen and Zhou, Wei and Schl{\"u}ter, Ralf and Ney, Hermann},
+	journal={arXiv:1907.01030},
+	year={2019}
+}
+
+
+@inproceedings{nolden2013advanced,
+	title={Advanced search space pruning with acoustic look-ahead for {WFST} based {LVCSR}},
+	author={Nolden, David and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confICASSP,
+	year={2013},
+}
+
+@inproceedings{beck2020lvcsr,
+	title={{LVCSR} with Transformer Language Models.},
+	author={Beck, Eugen and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confINTERSPEECH,
+	year={2020}
+}
+
+@inproceedings{zhang2021lattice,
+	title={On lattice-free boosted MMI training of {HMM} and {CTC}-based full-context {ASR} models},
+	author={Zhang, Xiaohui and Manohar, Vimal and Zhang, David and Zhang, Frank and Shi, Yangyang and Singhal, Nayan and Chan, Julian and Peng, Fuchun and Saraf, Yatharth and Seltzer, Mike},
+	booktitle=confASRU,
+	year={2021},
+	
+}
+
+@inproceedings{meng2022modular,
+	title={Modular Hybrid Autoregressive Transducer},
+	author={Meng, Zhong and Chen, Tongzhou and Prabhavalkar, Rohit and Zhang, Yu and Wang, Gary and Audhkhasi, Kartik and Emond, Jesse and Strohman, Trevor and Ramabhadran, Bhuvana and Huang, W Ronny and others},
+	booktitle=workSLT,
+	year={2022}
+}
+
+@inproceedings{chorowski2015attention,
+	title={Attention-based models for speech recognition},
+	author={Chorowski, Jan K and Bahdanau, Dzmitry and Serdyuk, Dmitriy and Cho, Kyunghyun and Bengio, Yoshua},
+	booktitle=confNIPS,
+	year={2015}
+}
+
+@inproceedings{variani2020hybrid,
+	title={Hybrid autoregressive transducer ({HAT})},
+	author={Variani, Ehsan and Rybach, David and Allauzen, Cyril and Riley, Michael},
+	booktitle=confICASSP,
+	year={2020},
+}
+
+@inproceedings{dong2018speech,
+	title={Speech-transformer: a no-recurrence sequence-to-sequence model for speech recognition},
+	author={Dong, Linhao and Xu, Shuang and Xu, Bo},
+	booktitle=confICASSP,
+	year={2018},
+	
+}
+
+
+@inproceedings{endtoendpovey,
+	title={End-to-end Speech Recognition Using Lattice-free {MMI}.},
+	author={Hadian, Hossein and Sameti, Hossein and Povey, Daniel and Khudanpur, Sanjeev},
+	booktitle=confInterspeech,
+	year={2018}
+}
+@inproceedings{odell1994tree,
+	title={Tree-based state clustering for large vocabulary speech recognition},
+	author={Odell, Julian J and Woodland, Philip C and Young, Steve J},
+	booktitle={{IEEE} Proc. of Intern. Conf. on Speech, Image Processing and Neural Networks},
+	year={1994},
+}
+
+@inproceedings{ctc,
+	title={Connectionist temporal classification: labelling unsegmented sequence data with recurrent neural networks},
+	author={Graves, Alex and Fern{\'a}ndez, Santiago and Gomez, Faustino and Schmidhuber, J{\"u}rgen},
+	booktitle=confICML,
+	year={2006}
+}
+
+@article{rnnt,
+	title={Sequence transduction with recurrent neural networks},
+	author={Graves, Alex},
+	journal=confICML,
+	year={2012}
+}
+
+@inproceedings{rnaSak,
+	title={Recurrent Neural Aligner: An Encoder-Decoder Neural Network Model for Sequence to Sequence Mapping.},
+	author={Sak, Hasim and Shannon, Matt and Rao, Kanishka and Beaufays, Fran{\c{c}}oise},
+	booktitle=confInterspeech,
+	year={2017}
+}
+
+@inproceedings{wiesler2014rasr,
+	title={{RASR/NN}: The {RWTH} neural network toolkit for speech recognition},
+	author={Wiesler, Simon and Richard, Alexander and Golik, Pavel and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confICASSP,
+	pages={3281--3285},
+	year={2014},
+}
+
+@inproceedings{wiesler2014rasrblind,
+	author= {BLIND-2},
+	title={{BLIND} Toolkit 2},
+	
+}
+
+@InProceedings {zeyer2018:returnnblind,
+	author= {BLIND-1},
+	title= {{BLIND} Toolkit 1},
+}
+
+@InProceedings { zeyer2018:returnn,
+	author= {Zeyer, Albert and Alkhouli, Tamer and Ney, Hermann},
+	title= {{RETURNN} as a Generic Flexible Neural Toolkit with Application to Translation and Speech Recognition},
+	booktitle=confACL,
+	year={2018},
+}
+
+
+
+
+
+@inproceedings{zoltan;AED,
+	title={Single headed attention based sequence-to-sequence model for state-of-the-art results on Switchboard-300},
+	author={T{\"u}ske, Zolt{\'a}n and Saon, George and Audhkhasi, Kartik and Kingsbury, Brian},
+	journal=confInterspeech,
+	year={2020},
+}
+
+@inproceedings{godfrey1992SWB,
+	author={Godfrey, J.J. and Holliman, E.C. and McDaniel, J.},
+	booktitle=confICASSP,
+	title={{Switchboard: Telephone Speech Corpus for Research and Development}},
+	year={1992},
+	%volume={1},
+	%month=mar,
+	%address={San Francisco,USA},
+	%number={},
+	%pages={517-520},
+	%doi={10.1109/ICASSP.1992.225858},
+}
+
+@inproceedings{povey2015librispeech,
+	author={Panayotov, V. and Chen, G. and Povey, D. and Khudanpur, S.},
+	title={{LibriSpeech: An ASR Corpus Based on Public Domain Audio Books}},
+	booktitle=confICASSP,
+	year=2015,
+}
+
+@InProceedings {schluter2007Gammatone,
+	author={Schluter, R. and Bezrukov, I. and Wagner, H. and Ney, H.},
+	title= {{Gammatone Features and Feature Combination for Large Vocabulary Speech Recognition}},
+	booktitle=confICASSP,
+	year= 2007,
+}
+
+@inproceedings{dozat2016incorporating,
+	title={{Incorporating Nesterov Momentum into Adam}},
+	author={Dozat, T.},
+	booktitle={ICLR workshop},
+	year={2016}
+}
+
+@InProceedings {zeyer2017blstm,
+	author={Zeyer, A. and Doetsch, P. and Voigtlaender, P. and Schlüter, R. and Ney, H.},
+	title= {{A Comprehensive Study of Deep Bidirectional LSTM RNNs for Acoustic Modeling in Speech Recognition}},
+	booktitle= confICASSP,
+	year= 2017,
+}
+
+@inproceedings{smith2019super,
+	title={Super-convergence: Very fast training of neural networks using large learning rates},
+	author={Smith, L. N. and Nicholay, T.},
+	booktitle={Artificial intelligence and machine learning for multi-domain operations applications},
+	year={2019},
+}
+
+@misc{luescher2023embedding,
+	url = {https://arxiv.org/abs/2301.04571},
+	author = {Lüscher, Christoph and Xu, Jingjing and Zeineldeen, Mohammad and Schlüter, Ralf and Ney, Hermann},
+	title = {Improving And Analyzing Neural Speaker Embeddings for ASR},
+	publisher = {arXiv},
+	year = {2023},
+}
+
+
+@inproceedings{park2019specaugment,
+	title={{SpecAugment}: A Simple Data Augmentation Method for Automatic Speech Recognition},
+	author={Park, Daniel S and Chan, William and Zhang, Yu and Chiu, Chung-Cheng and Zoph, Barret and Cubuk, Ekin D and Le, Quoc V},
+	booktitle=confInterspeech,
+	year={2019}
+}
+
+@inproceedings{transformer2020Wang,
+	title={Transformer-based acoustic modeling for hybrid speech recognition},
+	author={Wang, Yongqiang and Mohamed, Abdelrahman and Le, Due and Liu, Chunxi and Xiao, Alex and Mahadeokar, Jay and Huang, Hongzhao and Tjandra, Andros and Zhang, Xiaohui and Zhang, Frank and others},
+	booktitle=confICASSP,
+	year={2020},
+}
+
+
+@inproceedings{weiefficient,
+	title={{Efficient Training of Neural Transducer for Speech Recognition}},
+	author={Zhou, Wei and Michel, Wilfried and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confInterspeech,
+	year={2022}
+}
+
+@inproceedings{zeineldeen2022improving,
+	title={Improving the training recipe for a robust conformer-based hybrid model},
+	author={Zeineldeen, Mohammad and Xu, Jingjing and L{\"u}scher, Christoph and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confInterspeech,
+	year={2022}
+}
+
+@INPROCEEDINGS{kim2022ebranch,
+	author={Kim, Kwangyoun and Wu, Felix and Peng, Yifan and Pan, Jing and Sridhar, Prashant and Han, Kyu J. and Watanabe, Shinji},
+	booktitle=workSLT, 
+	title={E-Branchformer: Branchformer with Enhanced Merging for Speech Recognition}, 
+	year={2022},
+}
+
+@inproceedings{raissi2020fh,
+	title={Context-Dependent Acoustic Modeling Without Explicit Phone Clustering},
+	author={Raissi, Tina and Beck, Eugen and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confInterspeech,
+	year={2020}
+}
+
+@inproceedings{raissi2022fh,
+	title={Improving Factored Hybrid Acoustic Modeling without State Tying},
+	author={Raissi, Tina and Beck, Eugen and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=confICASSP,
+	year={2022}
+}
+
+
+@inproceedings{raissi2022hmm,
+	title={HMM vs. CTC for Automatic Speech Recognition: Comparison Based on Full-Sum Training from Scratch},
+	author={Raissi, Tina and Zhou, Wei and Berger, Simon and Schl{\"u}ter, Ralf and Ney, Hermann},
+	booktitle=workSLT, 
+	year={2022}
+}
+
+@inproceedings{bell2016multitask,
+	title={Multitask learning of context-dependent targets in deep neural network acoustic models},
+	author={Bell, Peter and Swietojanski, Pawel and Renals, Steve},
+	journal={{IEEE}/{ACM} Transactions on Audio, Speech, and Language Processing},
+	year={2016},
+}
+
+@article{mohri2004weighted,
+	title={Weighted finite-state transducer algorithms. an overview},
+	author={Mohri, Mehryar},
+	journal={Formal Languages and Applications},
+	pages={551--563},
+	year={2004},
+	publisher={Springer}
+}
+
+
+@article{luscher2019rwth,
+	title={RWTH ASR Systems for LibriSpeech: Hybrid vs Attention-w/o Data Augmentation},
+	author={L{\"u}scher, Christoph and Beck, Eugen and Irie, Kazuki and Kitza, Markus and Michel, Wilfried and Zeyer, Albert and Schl{\"u}ter, Ralf and Ney, Hermann},
+	journal=confInterspeech,
+	year={2019}
+}
+
+@inproceedings{tuske2015asru,
+	author= {T{\"u}ske, Zolt{\'a}n and Golik, Pavel and Schl{\"u}ter, Ralf and Ney, Hermann},
+	title= {Speaker Adaptive Joint Training of {G}aussian Mixture Models and Bottleneck Features},
+	booktitle= confASRU,
+	year= 2015,	
+}
+
+
+@article{zeineldeen2021investigating,
+	title={Investigating Methods to Improve Language Model Integration for Attention-based Encoder-Decoder ASR Models},
+	author={Zeineldeen, Mohammad and Glushko, Aleksandr and Michel, Wilfried and Zeyer, Albert and Schl{\"u}ter, Ralf and Ney, Hermann},
+	journal=confInterspeech,
+	year={2021}
+}
+
+@inproceedings{meng2021internal,
+	title={Internal language model estimation for domain-adaptive end-to-end speech recognition},
+	author={Meng, Zhong and Parthasarathy, Sarangarajan and Sun, Eric and Gaur, Yashesh and Kanda, Naoyuki and Lu, Liang and Chen, Xie and Zhao, Rui and Li, Jinyu and Gong, Yifan},
+	booktitle=workSLT,
+	year={2021},
+	
+}
+

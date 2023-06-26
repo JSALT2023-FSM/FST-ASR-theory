@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+
+\node[state, style=thick] (q1) {$1/6$};
+\node[state, style=thick, above=of q1] (q2) {$2/8$};
+\node[state, right=of q1] (q3) {$2$};
+\node[state, right=of q3] (q4) {$3$};
+\node[state, right=of q4, accepting] (q5) {$5/1$};
+
+\draw (q1) edge[above] node{$a/5$} (q3)
+      (q2) edge[above, bend left] node{$b/7$} (q3)
+      (q3) edge[above, bend left] node{$\epsilon/4$} (q4)
+      (q3) edge[below, bend right] node{$b/3$} (q4)
+      (q4) edge[above] node{$c/2$} (q5);
+
+\end{tikzpicture}

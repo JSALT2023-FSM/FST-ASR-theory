@@ -1,0 +1,62 @@
+This is BibTeX, Version 0.99d (TeX Live 2022)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: smbr.aux
+The style file: IEEEtran.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: mybib.bib
+You're missing a field name---line 197 of file mybib.bib
+ :  
+ :  %volume={1},
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+-- IEEEtran.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+
+Done.
+You've used 5 entries,
+            4039 wiz_defined-function locations,
+            853 strings with 8703 characters,
+and the built_in function-call counts, 4523 in all, are:
+= -- 353
+> -- 96
+< -- 45
++ -- 53
+- -- 14
+* -- 226
+:= -- 651
+add.period$ -- 10
+call.type$ -- 5
+change.case$ -- 5
+chr.to.int$ -- 108
+cite$ -- 5
+duplicate$ -- 305
+empty$ -- 378
+format.name$ -- 18
+if$ -- 1045
+int.to.chr$ -- 0
+int.to.str$ -- 5
+missing$ -- 51
+newline$ -- 38
+num.names$ -- 5
+pop$ -- 117
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 2
+skip$ -- 354
+stack$ -- 0
+substring$ -- 255
+swap$ -- 257
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 5
+type$ -- 5
+warning$ -- 0
+while$ -- 25
+width$ -- 6
+write$ -- 71
+(There was 1 error message)
